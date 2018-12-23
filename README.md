@@ -55,6 +55,8 @@
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品结构图.png)
 #### 2.产品信息结构图
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品信息结构图.png)
+#### 3.产品流程图
+![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品流程图.png)
 ## 功能阐述
 #### 1.功能权限
 - 未登录状态: 未登录状态下可查看菜谱
