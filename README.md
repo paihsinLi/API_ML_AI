@@ -1,16 +1,28 @@
-- Target release: 2018年11月25日
-- Epic: 厨房大师APP
-- Document Status: 进行中
-- Document owner: 李佰芯
-- Designer: 李佰芯
-- Developer: 李佰芯
-- QA: 李佰芯
-- Goals: 识别菜谱，提供美食烹饪方法，技巧学习、交流指导。
-- Background and strategic fit: 在朋友圈和微博上看到许多转发的美食却不知道菜名和做法，可是又十分想尝试。
-- Assumptions: 用户使用此主要功能时，主要是在想尝试识别这道菜与其做法或分享自己做菜的过程和想法。
-- 需求 Requirements: 
+| 发布日期 | 2018-11-23 |
+| ------ | ------ |
+| Epic | 厨房大师 |
+| 文件现状 | 进行中 |
+| 文件主人 | 李佰芯 |
+| 领头设计者 | 李佰芯 |
+| 领头开发者 | 李佰芯 |
+| 领头测试者 | 李佰芯 |
+## 目标: 
+识别菜谱，提供美食烹饪方法，技巧学习、交流指导。
+## 问题 : 
+帮助不会做菜甚至想学做菜的人也能学会做菜，甚至知道如何搭配菜式，并且可以和志同道合的人一起交流想法。
+## 不做 : 
+（语音识别）用户通过语音询问得到菜式在百度百科上的相关信息
+## 加值宣言: 
+研究发现，目前已有不少菜谱类APP视频教学做菜，将美食菜谱、社交互动、美食画报整合为一体的APP，例如"豆果美食"等。但是随着人工智能的发展，人工智能快速识别菜谱成为一大优势。但是市面上这些应用都还有没有可以拍照进行菜谱识别的功能。现将采用百度的菜品识别API对菜谱APP产品进行加值和优化。主要层面 ：运用了机器学习中视觉技术的细粒度图像识别的菜品识别功能，通过输入的一张图片（清晰度和解析度正常），即可输出图片的菜品名称、菜式做法、置信度。
+## 核心价值: 
+解决用户想要知道美食的名称以及烹饪方法。
+## 用户痛点: 
+在朋友圈和微博上看到的美食和餐厅吃过的美食却不知道菜名和做法，可是又十分想尝试自己做。
+## 使用场景: 
+用户使用此主要功能时，主要是想尝试快速识别这道菜的做法或分享自己做菜的过程和想法。
+## 需求: 
 
-| 序号 | 使用场景 | 问题需求 | 对应功能 |
+| 序号 | 使用案例 | 问题需求 | 对应功能 |
 | ------ | ------ | ------ | ------ |
 | 1 | 想做饭给对象吃，但是不知道如何下手 | 想获取全头到尾的全套指导 | 菜品搭配，菜谱功能 |
 | 2 | 突然想吃某道菜，但是之前从来没有做过 | 想获得某道菜的制作方式 | 识别菜式 |
@@ -18,13 +30,31 @@
    - 所对映的标题：菜谱识别
    - 重要程度：重要
    - 笔记：百度图像识别API请求回应  
-- 问题 Questions: 帮助不会做菜甚至想学做菜的人也能学会做菜，甚至知道如何搭配菜式，并且可以和志同道合的人一起交流想法。
-- 不做 Not doing: （语音识别）用户通过语音询问得到菜式在百度百科上的相关信息
+## AI产品概率性与用户痛点: 
+- 百度视觉技术的图像识别技术保证：
+1. 稳定性好提供24小时云端高稳定服务，宕机率低，故障恢复快，单图毫秒级响应，服务可用性高达99.95%
+2. 准确度高：基于百度丰富的海量数据，利用深度学习技术及精准的算法迭代模型，不断提高准确性
+3. 功能丰富：支持上千种物体识别及场景识别，并在持续增加中，让你更好的读懂世界。
+- 该产品因照片识别或拍照不清晰造成识别不准确的状况，对正面影响并不大。
+## API使用风险评估 : 
+百度的人工智能错误率为4.6%，微软的人工智能错误率为4.94%
+- 错误方法解决
+1. 用户可以手动输入帮助机器更正错误，确保机器能够准确识别。
+2. 系统会反馈给用户，该识别的菜式与您预想有偏差。
+## 交互过程
+#### 1.界面识别
+![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/界面识别.png)
+#### 2.识别模块
+![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/识别模块.png)
+#### 3.拍照模块
+![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/拍照模块.png)
+#### 4.菜谱模块
+![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/菜谱模块.png)
 ## 产品结构
 #### 1.产品结构图
-![Aaron Swartz](https://raw.githubusercontent.com/paihsinLi/API_ML_AI/master/%E7%BB%93%E6%9E%84%E5%9B%BE/%E4%BA%A7%E5%93%81%E7%BB%93%E6%9E%84%E5%9B%BE.png)
+![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品结构图.png)
 #### 2.产品信息结构图
-![Aaron Swartz](https://raw.githubusercontent.com/paihsinLi/API_ML_AI/master/%E7%BB%93%E6%9E%84%E5%9B%BE/%E4%BA%A7%E5%93%81%E4%BF%A1%E6%81%AF%E7%BB%93%E6%9E%84%E5%9B%BE.png)
+![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品信息结构图.png)
 ## 功能阐述
 #### 1.功能权限
 - 未登录状态: 未登录状态下可查看菜谱
@@ -56,6 +86,14 @@
 ## 产品原型链接
 <https://paihsinli.github.io/API_ML_AI/%E4%BA%A7%E5%93%81%E5%8E%9F%E5%9E%8B/#g=1&p=智能菜谱识别>
 ## 产品结构图链接
-<http://naotu.baidu.com/file/ad8525f825d3b5d9ba06e05fa51f39ea>
+<https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品结构图.png>
 ## 产品信息结构图链接
-<http://naotu.baidu.com/file/53bc5e8a6332d0bc77cd2f55157d936c>
+<https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品信息结构图.png>
+## 界面识别
+<https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/界面识别.png>
+## 识别模块
+<https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/识别模块.png>
+## 拍照模块
+<https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/拍照模块.png>
+## 菜谱模块
+<https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/菜谱模块.png>
