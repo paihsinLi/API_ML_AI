@@ -85,6 +85,42 @@
 - 然后它就会把access_token返回给你，读取下来，然后因为是json格式，所以用json.load()转成字典
 - 然后复制access_token那行代码，组合并调用，打开本地相册文件（要识别的美食）
 - 再把处理好的img和刚获得的access_token扔进一个字典里面，然后把字典提交给网址(https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general)，它会以json格式返回一个分析结果给我们。（得到我们想要的菜式）
+#### 代码片段
+`import  requests, sys#获取access_token
+`
+```import  requests, sys#获取access_token
+import ssl
+header={'Content-Type': 'application/json; charset=UTF-8'}
+# client_id 为官网获取的AK， client_secret 为官网获取的SK
+host ='https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=o6N6MbRpRa5gWFIf70UZdl7V&client_secret=SxdDxagclKGG5Lncqh0bKSFuCTQ1dFWp'
+res=requests.post(host,json=header)
+print(res.text)
+```
+得到access_token：
+`24.35833cf62ab5848149456a0369b98ff8.2592000.1536748894.282335-11667xxx
+`
+
+组合并调用
+```import base64
+import requests
+import  urllib.parse
+request_url = "https://aip.baidubce.com/rest/2.0/image-classify/v2/dish"
+# 二进制方式打开图片文件
+f = open('C:\\Users\\index\\Pictures\\3.jpg', 'rb')
+img = base64.b64encode(f.read())
+ 
+params = {"image":img,"top_num":5}
+urllib.parse.urlencode(params)
+header={'Content-Type':'application/x-www-form-urlencoded'}
+access_token = 'access_token":"24.35833cf62ab5848149456a0369b98ff8.2592000.1536748894.282335-1166xxx
+request_url = request_url + "?access_token=" + access_token
+request = requests.post(url=request_url, data=params,)
+print(request.text)
+```
+打开本地文件.jpg（菜谱图片）,得到返回值:
+
+`{"log_id": 6222410495897780005, "result_num": 5, "result": [{"calorie": "313", "has_calorie": true, "name": "老式面包", "probability": "0.438405"}, {"calorie": "371", "has_calorie": true, "name": "手撕面包", "probability": "0.058642"}, {"calorie": "378", "has_calorie": true, "name": "牛角面包", "probability": "0.0558874"}, {"calorie": "282", "has_calorie": true, "name": "烤面包", "probability": "0.0494301"}, {"calorie": "392", "has_calorie": true, "name": "小面包", "probability": "0.0390798"}]}
+`
 ## 产品原型链接
 <https://paihsinli.github.io/API_ML_AI/%E4%BA%A7%E5%93%81%E5%8E%9F%E5%9E%8B/#g=1&p=智能菜谱识别>
 ## 产品结构图链接
