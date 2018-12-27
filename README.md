@@ -57,7 +57,7 @@
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品信息结构图.png)
 #### 3.产品流程图
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品流程图.png)
-## 功能阐述
+## 其他功能阐述
 #### 1.功能权限
 - 未登录状态: 未登录状态下可查看菜谱
 - 已登录状态: 已登录状态下可执行所有操作
@@ -85,8 +85,8 @@
 - 然后它就会把access_token返回给你，读取下来，然后因为是json格式，所以用json.load()转成字典
 - 然后复制access_token那行代码，组合并调用，打开本地相册文件（要识别的美食）
 - 再把处理好的img和刚获得的access_token扔进一个字典里面，然后把字典提交给网址(https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general)，它会以json格式返回一个分析结果给我们。（得到我们想要的菜式）
-#### 代码片段
-`import  requests, sys#获取access_token
+#### API的运用:
+`import  requests, sys#获取access_token
 `
 ```import  requests, sys#获取access_token
 import ssl
@@ -127,6 +127,8 @@ print(request.text)
 <https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品结构图.png>
 ## 产品信息结构图链接
 <https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品信息结构图.png>
+## 产品流程图
+<https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品流程图.png>
 ## 界面识别
 <https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/界面识别.png>
 ## 识别模块
