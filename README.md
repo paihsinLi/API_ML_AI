@@ -46,7 +46,11 @@
 人类对ImageNet图像的识别错误率大约在5%。相比之下，微软的人工智能系统的错误率为4.94%，谷歌为4.8%，百度如今已将这一错误率进一步降至4.58%。
 - 错误方法解决
 1. 用户可以手动输入帮助机器更正错误，确保机器能够准确识别。
-2. 系统会反馈给用户，该识别的菜式与您预想有偏差。
+2. 系统会反馈给用户："亲，没查到你想要的"或提示该识别的菜式与您预想有偏差。
+## API使用比较分析
+1. 百度API识别的图片比较单一，识别菜名和菜谱识别结果数组，还有对应百度百科的描述
+2. 谷歌API识别出菜谱由来和菜谱关键字，主料和辅料并提供了具体的菜谱做法步骤
+- 总的来说：谷歌API比较满足用户需求，识别速度较快的是：百度API，精准度较高的是谷歌API。
 ## 交互过程
 #### 1.界面识别
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/界面识别.png)
@@ -56,7 +60,7 @@
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/拍照模块.png)
 #### 4.菜谱模块
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/菜谱模块.png)
-- 口头操作说明:用户点击拍照/选取图像识别，跳转到图库选择，若点击拍照识别，则进入实时拍照，成功后则到识别出来的菜谱模块。
+- 口头操作说明：用户点击拍照/选取图像识别，跳转到图库选择，若点击拍照识别，则进入实时拍照，成功后则到识别出来的菜谱模块。
 ## 产品结构
 #### 1.产品结构图
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品结构图.png)
@@ -105,16 +109,19 @@ print(request.text)
 ```
 打开本地文件.jpg（菜谱图片）,得到返回值:
 
-`{"log_id": 6222410495897780005, "result_num": 1, "result": [{"name": "秘制红烧肉"}]}
+`{"log_id": 6222410495897780005, "result_num": 1, "result": [{"name": "秘制红烧肉"}{"baike_info": {
+			"baike_url": "http://baike.baidu.com/item/%E9%85%B8%E6%B1%A4%E9%B1%BC/1754055",
+			"description": "酸汤鱼，是黔桂湘交界地区的一道侗族名菜，与侗族相邻的苗、水、瑶等少数民族也有相似菜肴，但其中以贵州侗族酸汤鱼最为有名，据考证此菜肴最早源于黎平县雷洞镇牙双一带。制作原料主要有鱼肉、酸汤、山仓子等香料。成菜后，略带酸味、幽香沁人、鲜嫩爽口开胃，是贵州“黔系”菜肴的代表作之一。这道菜通常先自制酸汤，之后将活鱼去掉内脏，入酸汤煮制。"
+		}}]}
 `
 
 Ajax运用artTemplate实现菜谱
 
-聚合数据API https://www.juhe.cn，在这上面找到菜谱大全数据接口文档
+GoogleAPI：https://www.google.cn 在这上面找到菜谱大全数据接口文档
 
 key后面的数据是固定的，rn和pn是参数，后面的数值可以自定义，dtype是jsonp，最后加上输入的值  txt
 
-`url:"http://apis.juhe.cn/cook/query?key=1993189fed228f8036959eb6e187b419&rn=3&pn=0&dtype=jsonp&menu="+txt
+`url:"http://apis.Google.cn/cook/query?key=1993189fed228f8036959eb6e187b419&rn=3&pn=0&dtype=jsonp&menu="+txt
 `
 
 代码展示
@@ -157,7 +164,7 @@ key后面的数据是固定的，rn和pn是参数，后面的数值可以自定�
                 //发送异步请求 jsonp
                 $.ajax({
                     type:"get",
-                    url:"http://apis.juhe.cn/cook/query?key=1993189fed228f8036959eb6e187b419&rn=3&pn=0&dtype=jsonp&menu="+txt,
+                    url:"http://apis.google.cn/cook/query?key=1993189fed228f8036959eb6e187b419&rn=3&pn=0&dtype=jsonp&menu="+txt,
                     dataType:"jsonp",
                     success:function(data) {
                         //清空容器
@@ -229,49 +236,49 @@ key后面的数据是固定的，rn和pn是参数，后面的数值可以自定�
              "imtro": "做红烧肉的豆亲们很多，大家对红烧肉的热爱更不用我说，从名字上就能反映出来。一些高手们对红烧肉的认识更是令我佩服，单单就红烧肉的做法、菜谱都看得我是眼花缭乱，口水横流。单纯的红烧肉我平时还真没做过，再不抓紧时间做一回解解馋，不是对不起别人，而是太对不起我自己了！ 这道菜的菜名用了秘制二字来形容，当然是自己根据自己多年吃货的经验想象出来的，我不介意把自己的做法与大家共享，只为大家能同我一样，吃到不同口味的红烧肉。不同的人们根据自己的习惯都有不同的做法，味道也不尽相同。我的秘制的关键就是必须用玫瑰腐乳、冰糖和米醋这三种食材，腐乳和冰糖可以使烧出来的肉色泽红亮，米醋能解腻，令肥肉肥而不腻，此法烧制的红烧肉软糯中略带咸甜，的确回味无穷！",
              "ingredients": "五花肉,500g",
              "burden": "玫瑰腐乳,适量;盐,适量;八角,适量;草果,适量;香叶,适量;料酒,适量;米醋,适量;生姜,适量",
-             "albums": ["http:\/\/img.juhe.cn\/cookbook\/t\/0\/45_854851.jpg"],
+             "albums": ["http:\/\/img.google.cn\/cookbook\/t\/0\/45_854851.jpg"],
              "steps": [{
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_0824e37faf00b71e.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_0824e37faf00b71e.jpg",
                  "step": "1.将五花肉煮至断生状态"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_b6d7329b703f6e85.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_b6d7329b703f6e85.jpg",
                  "step": "2.切成大小一致的块"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_6ee9e8dab0516333.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_6ee9e8dab0516333.jpg",
                  "step": "3.放在锅内煎"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_b9afd6d4dd81f55c.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_b9afd6d4dd81f55c.jpg",
                  "step": "4.入生姜"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_d0170fbe236421f9.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_d0170fbe236421f9.jpg",
                  "step": "5.放八角草果各一个，香叶一片"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_639b12210745fa41.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_639b12210745fa41.jpg",
                  "step": "6.放冰糖"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_c25e0cedd2012f45.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_c25e0cedd2012f45.jpg",
                  "step": "7.加料酒"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_eb68327980f022dd.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_eb68327980f022dd.jpg",
                  "step": "8.加玫瑰腐乳和腐乳汁及适量盐"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_ac17263a11507a41.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_ac17263a11507a41.jpg",
                  "step": "9.加米醋"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_f5489af5d12b4930.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_f5489af5d12b4930.jpg",
                  "step": "10.加水继续炖"
              },
              {
-                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_8e0cf83cb7306281.jpg",
+                 "img": "http:\/\/img.google.cn\/cookbook\/s\/1\/45_8e0cf83cb7306281.jpg",
                  "step": "11.直至肉变软糯汤汁收干即可"
              }]
          }]
