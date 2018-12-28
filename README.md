@@ -71,7 +71,7 @@
 - 然后它就会把access_token返回给你，读取下来，然后因为是json格式，所以用json.load()转成字典
 - 然后复制access_token那行代码，组合并调用，打开本地相册文件（要识别的美食）
 - 再把处理好的img和刚获得的access_token扔进一个字典里面，然后把字典提交给网址(https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general)，它会以json格式返回一个分析结果给我们。（得到我们想要的菜式）
-#### API的运用:
+### API的运用:
 `import  requests, sys#获取access_token
 `
 ```import  requests, sys#获取access_token
@@ -95,7 +95,7 @@ request_url = "https://aip.baidubce.com/rest/2.0/image-classify/v2/dish"
 f = open('C:\\Users\\index\\Pictures\\3.jpg', 'rb')
 img = base64.b64encode(f.read())
  
-params = {"image":img,"top_num":5}
+params = {"image":img,"top_num":1}
 urllib.parse.urlencode(params)
 header={'Content-Type':'application/x-www-form-urlencoded'}
 access_token = 'access_token":"24.35833cf62ab5848149456a0369b98ff8.2592000.1536748894.282335-1166xxx
@@ -105,8 +105,177 @@ print(request.text)
 ```
 打开本地文件.jpg（菜谱图片）,得到返回值:
 
-`{"log_id": 6222410495897780005, "result_num": 5, "result": [{"calorie": "313", "has_calorie": true, "name": "老式面包", "probability": "0.438405"}, {"calorie": "371", "has_calorie": true, "name": "手撕面包", "probability": "0.058642"}, {"calorie": "378", "has_calorie": true, "name": "牛角面包", "probability": "0.0558874"}, {"calorie": "282", "has_calorie": true, "name": "烤面包", "probability": "0.0494301"}, {"calorie": "392", "has_calorie": true, "name": "小面包", "probability": "0.0390798"}]}
+`{"log_id": 6222410495897780005, "result_num": 1, "result": [{"name": "秘制红烧肉"}]}
 `
+
+Ajax运用artTemplate实现菜谱
+
+聚合数据API https://www.juhe.cn，在这上面找到菜谱大全数据接口文档
+
+key后面的数据是固定的，rn和pn是参数，后面的数值可以自定义，dtype是jsonp，最后加上输入的值  txt
+
+`url:"http://apis.juhe.cn/cook/query?key=1993189fed228f8036959eb6e187b419&rn=3&pn=0&dtype=jsonp&menu="+txt
+`
+
+代码展示
+
+```<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菜谱</title>
+    <style>
+        .all {
+            margin-top: 30px;
+        }
+        .xh {
+            float: left;
+            margin-right: 20px;
+            color: red;
+            font-style: italic;
+            font-size: 30px;
+        }
+        #menu {
+            width: 500px;
+        }
+    </style>
+ 
+    <script src="./jquery-2.2.0.js"></script>
+    <script src="template-native-debug.js"></script>
+    <script>
+        //1、从服务器获取数据
+        //2、解析从服务器获取的数据
+        $(function(){
+            $("#btnSearch").click(function(){
+ 
+                var menu=$("#menu");
+                menu.text("正在加载...");//页面加载慢时显示
+                //获取文本框的值
+                var txt=$("#txtSearch").val();
+                //对用户输入的内容进行URL编码
+                txt=encodeURIComponent(txt);
+                //发送异步请求 jsonp
+                $.ajax({
+                    type:"get",
+                    url:"http://apis.juhe.cn/cook/query?key=1993189fed228f8036959eb6e187b419&rn=3&pn=0&dtype=jsonp&menu="+txt,
+                    dataType:"jsonp",
+                    success:function(data) {
+                        //清空容器
+                        menu.text("");
+ 
+                        //解析数据
+ 
+                        if (data.resultcode != 200) {
+                            menu.text("亲，没查到你想要的");
+                            return;
+                        }
+                        //解析数据 模板引擎
+ 
+                        var html = template("tpl", data.result);
+                        menu.html(html);
+                    },
+                    error:function(){
+                        menu.text("错误");
+                    }
+                });
+            });
+        })
+ 
+    </script>
+
+//模板引擎
+
+    <script id="tpl" type="text/html">
+        <% for(var i=0;i< data.length;i++) { %>
+        <div class="all">
+            <h2><%= data[i].title %></h2>
+            <p class="intro"><%= data[i].imtro %></p>
+            <% for(var j=0;j< data[i].albums.length;j++) { %>
+                <img src="<%= data[i].albums[j] %>">
+            <% } %>
+            <p class="zl">主料：<%= data[i].ingredients %></p>
+            <p class="fl">辅料：<%= data[i].burden %></p>
+            <div class="steps">
+                <% for(var k=0;k< data[i].steps.length;k++) { %>
+                    <em class="xh"><%= k+1 %>.</em>
+                    <div class="c">
+                        <p><% data[i].steps[k].step %></p>
+                        <p><img src= "<%= data[i].steps[k].img %>"></p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <hr>
+        <% } %>
+ 
+    </script>
+</head>
+<body>
+    <input type="text" id="txtSearch">
+    <input type="button" value="搜索" id="btnSearch">
+    <div id="menu"></div>
+</body>
+</html>
+```
+解析数据如下
+``` {
+     "resultcode": "200",
+     "reason": "Success",
+     "result": {
+         "data": [{
+             "id": "45",
+             "title": "秘制红烧肉",
+             "tags": "家常菜;热菜;烧;煎;炖;红烧;炒锅",
+             "imtro": "做红烧肉的豆亲们很多，大家对红烧肉的热爱更不用我说，从名字上就能反映出来。一些高手们对红烧肉的认识更是令我佩服，单单就红烧肉的做法、菜谱都看得我是眼花缭乱，口水横流。单纯的红烧肉我平时还真没做过，再不抓紧时间做一回解解馋，不是对不起别人，而是太对不起我自己了！ 这道菜的菜名用了秘制二字来形容，当然是自己根据自己多年吃货的经验想象出来的，我不介意把自己的做法与大家共享，只为大家能同我一样，吃到不同口味的红烧肉。不同的人们根据自己的习惯都有不同的做法，味道也不尽相同。我的秘制的关键就是必须用玫瑰腐乳、冰糖和米醋这三种食材，腐乳和冰糖可以使烧出来的肉色泽红亮，米醋能解腻，令肥肉肥而不腻，此法烧制的红烧肉软糯中略带咸甜，的确回味无穷！",
+             "ingredients": "五花肉,500g",
+             "burden": "玫瑰腐乳,适量;盐,适量;八角,适量;草果,适量;香叶,适量;料酒,适量;米醋,适量;生姜,适量",
+             "albums": ["http:\/\/img.juhe.cn\/cookbook\/t\/0\/45_854851.jpg"],
+             "steps": [{
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_0824e37faf00b71e.jpg",
+                 "step": "1.将五花肉煮至断生状态"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_b6d7329b703f6e85.jpg",
+                 "step": "2.切成大小一致的块"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_6ee9e8dab0516333.jpg",
+                 "step": "3.放在锅内煎"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_b9afd6d4dd81f55c.jpg",
+                 "step": "4.入生姜"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_d0170fbe236421f9.jpg",
+                 "step": "5.放八角草果各一个，香叶一片"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_639b12210745fa41.jpg",
+                 "step": "6.放冰糖"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_c25e0cedd2012f45.jpg",
+                 "step": "7.加料酒"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_eb68327980f022dd.jpg",
+                 "step": "8.加玫瑰腐乳和腐乳汁及适量盐"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_ac17263a11507a41.jpg",
+                 "step": "9.加米醋"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_f5489af5d12b4930.jpg",
+                 "step": "10.加水继续炖"
+             },
+             {
+                 "img": "http:\/\/img.juhe.cn\/cookbook\/s\/1\/45_8e0cf83cb7306281.jpg",
+                 "step": "11.直至肉变软糯汤汁收干即可"
+             }]
+         }]
+```
 ## 其他功能阐述
 #### 1.功能权限
 - 未登录状态: 未登录状态下可查看菜谱
