@@ -108,8 +108,7 @@ Ajax运用artTemplate实现菜谱
 
 GoogleAPI：https://www.google.cn 在这上面找到菜谱大全数据接口文档
 
-key后面的数据是固定的，rn和pn是参数，后面的数值可以自定义，dtype是jsonp，最后加上输入的值  txt
-
+##### 笔记：key后面的数据是固定的，rn和pn是参数，后面的数值可以自定义，dtype是jsonp，最后加上输入的值  txt
 `url:"http://apis.Google.cn/cook/query?key=1993189fed228f8036959eb6e187b419&rn=3&pn=0&dtype=jsonp&menu="+txt
 `
 
