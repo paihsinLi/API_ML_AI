@@ -68,14 +68,7 @@
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品信息结构图.png)
 #### 3.产品流程图
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品流程图.png)
-## API图像识别
-- 首先进入到百度AI的官网，找到图像识别需要的API
-- 接下来就是代码调用部分了，要使用API，我们需要得到一个叫“access_token”。它需要“API Key”和“Secret Key”来获取。
-- 把Api Key和Secret Key提交给https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials
-- 然后它就会把access_token返回给你，读取下来，然后因为是json格式，所以用json.load()转成字典
-- 然后复制access_token那行代码，组合并调用，打开本地相册文件（要识别的美食）
-- 再把处理好的img和刚获得的access_token扔进一个字典里面，然后把字典提交给网址(https://aip.baidubce.com/rest/2.0/image-classify/v2/advanced_general)，它会以json格式返回一个分析结果给我们。（得到我们想要的菜式）
-### API的运用:
+## API的运用:
 `import  requests, sys#获取access_token
 `
 ```import  requests, sys#获取access_token
@@ -86,11 +79,7 @@ host ='https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&cl
 res=requests.post(host,json=header)
 print(res.text)
 ```
-得到access_token：
-`24.35833cf62ab5848149456a0369b98ff8.2592000.1536748894.282335-11667xxx
-`
-
-组合并调用
+得到access_token后组合并调用
 ```import base64
 import requests
 import  urllib.parse
