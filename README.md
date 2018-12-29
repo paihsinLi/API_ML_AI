@@ -1,7 +1,7 @@
 | 发布日期 | 2018-11-23 |
 | ------ | ------ |
 | Epic | 厨房大师 |
-| 文件现状 | 进行中 |
+| 文件现状 | 已完成 |
 | 文件主人 | 李佰芯 |
 | 领头设计者 | 李佰芯 |
 | 领头开发者 | 李佰芯 |
@@ -69,8 +69,8 @@
 #### 3.产品流程图
 ![Aaron Swartz](https://github.com/paihsinLi/API_ML_AI/blob/master/结构图/产品流程图.png)
 ## API的运用:
-`import  requests, sys#获取access_token
-`
+
+import  requests, sys#获取access_token
 ```import  requests, sys#获取access_token
 import ssl
 header={'Content-Type': 'application/json; charset=UTF-8'}
